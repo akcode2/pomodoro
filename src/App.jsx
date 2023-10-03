@@ -1,35 +1,82 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [paused, setPaused] = useState(true);
+  const [mode, setMode] = useState("focus");
+  const [remainingSeconds, setRemainingSeconds] = useState(25 * 60);
+
+  useEffect(() => {
+    let interval;
+    if (!paused && remainingSeconds > 0) {
+      interval = setInterval(() => {
+        setRemainingSeconds((prevSeconds) => prevSeconds - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [paused, remainingSeconds]);
+
+  const handleStart = () => {
+    setPaused(false);
+    console.log(`updated paused:${paused}`);
+  };
+  const handlePause = () => {
+    setPaused(true);
+  };
+
+  const handleSkip = () => {
+    if (mode === "focus") {
+      setMode("break");
+      setRemainingSeconds(5 * 60);
+    } else {
+      setMode("focus");
+      setRemainingSeconds(25 * 60);
+    }
+  };
+
+  const handleReset = () => {
+    if (mode === "focus") {
+      setRemainingSeconds(25 * 60);
+    } else {
+      setRemainingSeconds(5 * 60);
+    }
+  };
+
+  const minutes = `${Math.floor(remainingSeconds / 60)}`.padStart(2, 0);
+  const seconds = `${remainingSeconds % 60}`.padStart(2, 0);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <button onClick={handleStart} disabled={!paused}>
+        Start
+      </button>
+      <button onClick={handlePause} disabled={paused}>
+        Pause
+      </button>
+      <button onClick={handleSkip}>Skip</button>
+      <button onClick={handleReset}>Reset</button>
+      <span>
+        {`${minutes}`}:{seconds}
+      </span>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
+
+// To Do:
+// 1. create basic state, start button, pause button, reset buttons, skip to break button
+// 2. Design app in figma
+// 3. Implement design
+
+// useEffect(() => {
+//   // Create a setInterval
+//   const interval = setInterval(() => {
+//     const newTime = subSeconds(focusTime, 1);
+//     setFocusTime(newTime);
+//   }, 1000);
+
+//   // In strict mode, setInterval is not cleared on unmount
+//   // Manually clear the interval on unmount
+//   return () => clearInterval(interval);
+// }, [focusTime]);
