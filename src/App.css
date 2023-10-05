@@ -1,5 +1,12 @@
-
 #root {
+  height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  width: 600px;
+}
+
+.app {
   max-width: 320px;
   height: 100vh;
   margin: 0 auto;
@@ -11,11 +18,27 @@
   flex-direction: column;
 }
 
-.btnContainer {
-  z-index: 2;
+.status {
+  font-size: 48px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+.doWhat {
+  color: #fadbdb;
 }
 
-.timer, #timeSpan {
+.btnContainer {
+  z-index: 2;
+  display: flex;
+  justify-content: space-around;
+  position: absolute;
+  bottom: 100px;
+  width: 38ch;
+}
+
+.timer,
+#timeSpan {
   margin: auto;
   z-index: 2;
 }
@@ -45,6 +68,7 @@
 
   /* Font style */
   font-size: 48px;
+  font-weight: 700;
 }
 
 .outerCircle {
@@ -59,7 +83,7 @@
 /* SVG path to display timer progress */
 .timer__path-elapsed {
   stroke-width: 7px;
-  stroke: #F3B8B7;
+  stroke: #f3b8b7;
 }
 
 .timer__path-remaining {
@@ -76,7 +100,7 @@
   /* One second aligns with the speed of the countdown timer */
   transition: 1s linear all;
 
-  stroke: #EB9592;
+  stroke: #db4f48;
 }
 
 .timer__svg {
@@ -92,7 +116,22 @@
   z-index: 1;
 }
 
+/* #clockTickAnimation > svg {
+  
+} */
+
 /* Animate clock ticks */
+
+@keyframes reset-svg {
+  from {
+    transform: rotate(0deg);
+    fill: #fadbdb;
+  }
+  to {
+    transform: rotate(-180deg);
+    fill: #000000;
+  }
+}
 
 @keyframes rotate {
   0% {
@@ -111,7 +150,15 @@
   }
 }
 
+.reset-svg {
+  animation-name: reset-svg;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+}
+
 .rotate-svg {
+  fill: #fadbdb;
   animation-name: rotate;
   animation-duration: 1s;
   /* animation-timing-function: steps(60, end); */
@@ -121,6 +168,5 @@
   animation-iteration-count: infinite;
 }
 
-.pause-rotate-svg {
-  fill: blue;
-}
+
+
