@@ -384,16 +384,23 @@ const App = () => {
       ];
       const interval = setInterval(() => {
         const randomIndex = Math.floor(Math.random() * motivations.length);
-        toast(`${motivations[randomIndex]}`, {position: toast.POSITION.BOTTOM_CENTER});
+        toast(`${motivations[randomIndex]}`, {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
       }, 20000);
 
       return () => clearInterval(interval);
     }
   }, [paused]);
 
-  const notify = () => toast("Wow so easy !");
   return (
     <>
+      <div className="tip">
+        ~~ Protip ~~<br />
+        Start / Pause: space <br />
+        Skip: → <br />
+        Reset timer: r <br />
+      </div>
       <div className="app">
         <div className="btnContainer">
           <button onClick={handleStart} disabled={!paused}>
@@ -453,7 +460,12 @@ const App = () => {
         </div>
         <div id="clockTickAnimation">{clockTicksSVG}</div>
       </div>
-      <ToastContainer autoclose={1000} limit={1} hideProgressBar={true} closeButton={false}/>
+      <ToastContainer
+        autoclose={1000}
+        limit={1}
+        hideProgressBar={true}
+        closeButton={false}
+      />
     </>
   );
 };

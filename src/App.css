@@ -10,6 +10,13 @@
   position: relative;
 }
 
+.tip {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: none;
+}
+
 .app {
   max-width: 320px;
   height: 100vh;
@@ -171,5 +178,9 @@
   animation-iteration-count: infinite;
 }
 
-
-
+  /* Styles to apply when screen width is greater than or equal to 600px */
+@media (min-width: 600px) {
+  .tip {
+    display: block;
+  }
+}
