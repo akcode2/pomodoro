@@ -6,68 +6,6 @@ const App = () => {
   const [mode, setMode] = useState("focus");
   const [remainingSeconds, setRemainingSeconds] = useState(25 * 60);
 
-  useEffect(() => {
-    let interval;
-    if (!paused && remainingSeconds > 0) {
-      interval = setInterval(() => {
-        // Update remaining seconds
-        setRemainingSeconds((prevSeconds) => prevSeconds - 1);
-
-        /* Update the progress bar */
-
-        // Determine fraction of time remaining
-        const timeLimit = (mode === "focus" ? 1500 : 300)
-        const rawTimeFraction = remainingSeconds / timeLimit;
-        const timeFraction = rawTimeFraction - (1 / timeLimit) * (1 - rawTimeFraction);
-        
-        // Compute the length of dash representing progress
-        // This number is proportional to 251.327 (2 * pi * 40 (radius of the circle in svg))
-        const circleDasharray = `${(timeFraction * 251.327).toFixed(0)} 251.327`;
-
-        // Set the progress bar's length
-        document
-          .getElementById("timer-path-remaining")
-          .setAttribute("stroke-dasharray", circleDasharray);
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [paused, remainingSeconds]);
-
-  const handleStart = () => {
-    setPaused(false);
-    console.log(`updated paused:${paused}`);
-  };
-  const handlePause = () => {
-    setPaused(true);
-  };
-
-  const handleSkip = () => {
-    if (mode === "focus") {
-      setMode("break");
-      setRemainingSeconds(5 * 60);
-      document.querySelector(".timer__path-elapsed").style.stroke = "#91EBA0";
-      document.querySelector(".timer__path-remaining").style.stroke = "#48DB63";
-    } else {
-      setMode("focus");
-      setRemainingSeconds(25 * 60);
-      document.querySelector(".timer__path-elapsed").style.stroke = "#EB9592";
-      document.querySelector(".timer__path-remaining").style.stroke = "#DB4F48";
-    }
-  };
-
-  const handleReset = () => {
-    if (mode === "focus") {
-      setRemainingSeconds(25 * 60);
-    } else {
-      setRemainingSeconds(5 * 60);
-    }
-  };
-
-  // Calculate remaining time as a fraction
-  function calculateTimeFraction() {
-    return;
-  }
-
   const clockTicksSVG = (
     <svg
       i:rulerOrigin="0 0"
@@ -387,20 +325,84 @@ const App = () => {
     </svg>
   );
 
+  useEffect(() => {
+    let interval;
+    if (!paused && remainingSeconds > 0) {
+      interval = setInterval(() => {
+        // Update remaining seconds
+        setRemainingSeconds((prevSeconds) => prevSeconds - 1);
+
+        /* Update the progress bar */
+
+        // Determine fraction of time remaining
+        const timeLimit = mode === "focus" ? 1500 : 300;
+        const rawTimeFraction = remainingSeconds / timeLimit;
+        const timeFraction =
+          rawTimeFraction - (1 / timeLimit) * (1 - rawTimeFraction);
+
+        // Compute the length of dash representing progress
+        // This number is proportional to 251.327 (2 * pi * 40 (radius of the circle in svg))
+        const circleDasharray = `${(timeFraction * 251.327).toFixed(
+          0
+        )} 251.327`;
+
+        // Set the progress bar's length
+        document
+          .getElementById("timer-path-remaining")
+          .setAttribute("stroke-dasharray", circleDasharray);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [paused, remainingSeconds]);
+
+  const handleStart = () => {
+    setPaused(false);
+    document.querySelector("#clockTickAnimation > svg").setAttribute("class", "rotate-svg");
+    console.log(`updated paused:${paused}`);
+  };
+  const handlePause = () => {
+    setPaused(true);
+    document.querySelector("#clockTickAnimation > svg").setAttribute("class", "pause-rotate-svg");
+  };
+
+  const handleSkip = () => {
+    if (mode === "focus") {
+      setMode("break");
+      setRemainingSeconds(5 * 60);
+      document.querySelector(".timer__path-elapsed").style.stroke = "#91EBA0";
+      document.querySelector(".timer__path-remaining").style.stroke = "#48DB63";
+    } else {
+      setMode("focus");
+      setRemainingSeconds(25 * 60);
+      document.querySelector(".timer__path-elapsed").style.stroke = "#EB9592";
+      document.querySelector(".timer__path-remaining").style.stroke = "#DB4F48";
+    }
+  };
+
+  const handleReset = () => {
+    if (mode === "focus") {
+      setRemainingSeconds(25 * 60);
+    } else {
+      setRemainingSeconds(5 * 60);
+    }
+  };
+
   const minutes = `${Math.floor(remainingSeconds / 60)}`.padStart(2, 0);
   const seconds = `${remainingSeconds % 60}`.padStart(2, 0);
   let remainingPathColor = "#EB9592";
 
   return (
     <>
-      <button onClick={handleStart} disabled={!paused}>
-        Start
-      </button>
-      <button onClick={handlePause} disabled={paused}>
-        Pause
-      </button>
-      <button onClick={handleSkip}>Skip</button>
-      <button onClick={handleReset}>Reset</button>
+      <div className="btnContainer">
+        <button onClick={handleStart} disabled={!paused}>
+          Start
+        </button>
+        <button onClick={handlePause} disabled={paused}>
+          Pause
+        </button>
+        <button onClick={handleSkip}>Skip</button>
+        <button onClick={handleReset}>Reset</button>
+      </div>
       <div className="timer">
         <svg
           className="timer__svg"
@@ -427,8 +429,7 @@ const App = () => {
           {`${minutes}`}:{seconds}
         </span>
       </div>
-
-      {clockTicksSVG}
+      <div id="clockTickAnimation">{clockTicksSVG}</div>
     </>
   );
 };

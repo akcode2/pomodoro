@@ -1,25 +1,23 @@
+
 #root {
-  max-width: 1280px;
+  max-width: 320px;
+  height: 100vh;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
+.btnContainer {
+  z-index: 2;
+}
 
-  55% {
-    transform: rotate(32deg);
-  }
-  72% {
-    transform: rotate(28deg);
-  }
-
-  100% {
-    transform: rotate(30deg);
-  }
+.timer, #timeSpan {
+  margin: auto;
+  z-index: 2;
 }
 
 /* Set height and width on timer container */
@@ -50,7 +48,7 @@
 }
 
 .outerCircle {
-  fill: #;
+  fill: #fadbdb;
 }
 /* Remove SVG fill and stroke to allow time span to appear through */
 .timer__circle {
@@ -61,7 +59,7 @@
 /* SVG path to display timer progress */
 .timer__path-elapsed {
   stroke-width: 7px;
-  stroke: #EB9592;
+  stroke: #F3B8B7;
 }
 
 .timer__path-remaining {
@@ -78,7 +76,7 @@
   /* One second aligns with the speed of the countdown timer */
   transition: 1s linear all;
 
-  stroke: #DB4F48;
+  stroke: #EB9592;
 }
 
 .timer__svg {
@@ -86,7 +84,33 @@
   transform: scaleX(-1);
 }
 
+#clockTickAnimation {
+  position: absolute;
+  height: 100vh;
+  width: 100vh;
+  left: 0;
+  z-index: 1;
+}
+
 /* Animate clock ticks */
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  55% {
+    transform: rotate(32deg);
+  }
+  72% {
+    transform: rotate(28deg);
+  }
+
+  100% {
+    transform: rotate(30deg);
+  }
+}
+
 .rotate-svg {
   animation-name: rotate;
   animation-duration: 1s;
@@ -95,4 +119,8 @@
   /* animation-timing-function: ease-in; */
   /* animation-timing-function: ease-in; */
   animation-iteration-count: infinite;
+}
+
+.pause-rotate-svg {
+  fill: blue;
 }
