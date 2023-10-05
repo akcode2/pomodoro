@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const App = () => {
   const [paused, setPaused] = useState(true);
   const [mode, setMode] = useState("focus");
@@ -362,6 +365,33 @@ const App = () => {
 
   // Listen for keyboard input
   document.addEventListener("keyup", handleKeypress);
+
+  // Add toast messages
+  useEffect(() => {
+    if (!paused) {
+      const motivations = [
+        "🌟 You're unstoppable!",
+        "🚀 Sky's the limit!",
+        "🌈 Embrace the journey, success is on the way!",
+        "🏆 One step closer to victory!",
+        "🌱 Growth requires effort—keep pushing!",
+        "🎯 Stay focused on your goals!",
+        "💪 Strength comes from within—tap into it!",
+        "🌟 Success is built on persistence and determination—keep going!",
+        "🚀 Take off towards success—thrust forward!",
+        "🌈 Make today amazing, one positive step at a time!",
+        "💪 Inhale confidence, exhale doubt—go conquer!",
+      ];
+      const interval = setInterval(() => {
+        const randomIndex = Math.floor(Math.random() * motivations.length);
+        toast(`${motivations[randomIndex]}`, {position: toast.POSITION.BOTTOM_CENTER});
+      }, 20000);
+
+      return () => clearInterval(interval);
+    }
+  }, [paused]);
+
+  const notify = () => toast("Wow so easy !");
   return (
     <>
       <div className="app">
@@ -423,7 +453,7 @@ const App = () => {
         </div>
         <div id="clockTickAnimation">{clockTicksSVG}</div>
       </div>
-      
+      <ToastContainer autoclose={1000} limit={1} hideProgressBar={true} closeButton={false}/>
     </>
   );
 };
