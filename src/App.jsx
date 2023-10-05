@@ -275,8 +275,6 @@ const App = () => {
     </svg>
   );
 
-  
-
   useEffect(() => {
     let interval;
     if (!paused && remainingSeconds > 0) {
@@ -312,7 +310,6 @@ const App = () => {
     document
       .querySelector("#clockTickAnimation > svg")
       .setAttribute("class", "rotate-svg");
-    console.log(`updated paused:${paused}`);
   };
   const handlePause = () => {
     setPaused(true);
@@ -325,8 +322,8 @@ const App = () => {
     if (mode === "focus") {
       setMode("break");
       setRemainingSeconds(5 * 60);
-      document.querySelector(".timer__path-elapsed").style.stroke = "#91EBA0";
-      document.querySelector(".timer__path-remaining").style.stroke = "#48DB63";
+      document.querySelector(".timer__path-elapsed").style.stroke = "#83A260";
+      document.querySelector(".timer__path-remaining").style.stroke = "#698F3F";
     } else {
       setMode("focus");
       setRemainingSeconds(25 * 60);
@@ -351,8 +348,7 @@ const App = () => {
     if (event.key === " ") {
       if (paused) {
         handleStart();
-      }
-      else {
+      } else {
         handlePause();
       }
     }
@@ -362,28 +358,12 @@ const App = () => {
     if (event.key === "r") {
       handleReset();
     }
-  }
+  };
 
   // Listen for keyboard input
   document.addEventListener("keyup", handleKeypress);
   return (
     <>
-      <div className="status">
-        {mode === "focus" && (
-          <>
-            <span className="timeTo">Time to </span>
-            <br />
-            <span className="doWhat">focus!</span>
-          </>
-        )}
-        {mode === "break" && (
-          <>
-            <span className="timeTo">Take a</span>
-            <br />
-            <span className="doWhat">short break!</span>
-          </>
-        )}
-      </div>
       <div className="app">
         <div className="btnContainer">
           <button onClick={handleStart} disabled={!paused}>
@@ -425,8 +405,25 @@ const App = () => {
             {`${minutes}`}:{seconds}
           </span>
         </div>
+        <div className="status">
+          {mode === "focus" && (
+            <>
+              <span className="timeTo">Time to </span>
+              <br />
+              <span className="doWhat focus">focus!</span>
+            </>
+          )}
+          {mode === "break" && (
+            <>
+              <span className="timeTo">Take a</span>
+              <br />
+              <span className="doWhat short-break">short break!</span>
+            </>
+          )}
+        </div>
         <div id="clockTickAnimation">{clockTicksSVG}</div>
       </div>
+      
     </>
   );
 };
